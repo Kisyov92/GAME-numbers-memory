@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+
+    <script defer src="script.js"></script>
+    <title>kisi - numbers memory</title>
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="starting-window">
+        <h2 class="welcome-msg">
+          <span>Are you ready</span> <br />
+          to test your memory?
+        </h2>
+        <p class="choose-msg">
+          Choose a difficulty level that you want to start at!
+        </p>
+        <ul class="difficulty-options">
+          <li class="difficulty-option" data-diff="easy">Easy - 1 lvl</li>
+          <li class="difficulty-option" data-diff="medium">Medium - 10 lvl</li>
+          <li class="difficulty-option" data-diff="hard">Hard - 20 lvl</li>
+        </ul>
+      </div>
+      <div class="game-window hide-el">
+        <div class="player-stats">
+          <p class="level-container">Level: <span class="level"></span></p>
+          <p class="time-container">0:00</p>
+          <p class="lives-container">💗</p>
+        </div>
+        <div class="numbers-container"></div>
+        <div class="btns-container">
+          <div class="btn btn-restart-game">START NEW GAME</div>
+          <div class="btn btn-restart-level">RESTART LEVEL</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
