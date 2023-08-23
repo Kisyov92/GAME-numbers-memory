@@ -25,8 +25,9 @@ body {
 }
 
 /*************************************/
-/* STARTING WINDOW */
+/* STARTING WINDOW  + ENDGAME WINDOW*/
 /*************************************/
+.ending-window,
 .starting-window {
   position: absolute;
   top: 50%;
@@ -41,6 +42,7 @@ body {
   text-align: center;
 }
 
+.urge-msg,
 .welcome-msg {
   font-size: 3.2rem;
   margin-bottom: 2rem;
@@ -51,6 +53,7 @@ body {
   font-weight: 700;
 }
 
+.ending-msg,
 .choose-msg {
   line-height: 1.2;
   font-size: 3.2rem;
@@ -146,6 +149,7 @@ body {
   cursor: pointer;
   user-select: none;
   transition: all 0.3s;
+  font-weight: 500;
 }
 
 .btn:hover {
@@ -161,6 +165,10 @@ body {
   display: none;
 }
 
+.wrong-ans {
+  background-color: red;
+}
+
 .grid-col-2 {
   grid-template-columns: repeat(2, 1fr);
 }
@@ -172,4 +180,23 @@ body {
 }
 .grid-col-5 {
   grid-template-columns: repeat(5, 1fr);
+}
+
+[data-num="0"] {
+  position: relative;
+}
+
+[data-num="0"]::before {
+  content: "Click to start!";
+  width: max-content;
+  color: #678983;
+  font-size: 3rem;
+  position: absolute;
+  top: 90px;
+  left: -30px;
+  rotate: -45deg;
+}
+
+.no-before::before {
+  content: "";
 }

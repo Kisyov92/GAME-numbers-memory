@@ -10,6 +10,9 @@ const numContainerHTML =
 
 const startWindowEl = document.querySelector(".starting-window");
 const gameWindow = document.querySelector(".game-window");
+const endWindowEl = document.querySelector(".ending-window");
+
+const endMsgEl = document.querySelector(".ending-msg");
 
 const difficultyOptionsEl = document.querySelector(".difficulty-options");
 
@@ -18,7 +21,7 @@ const timeEl = document.querySelector(".time-container");
 const livesEl = document.querySelector(".lives-container");
 const numsContainerEl = document.querySelector(".numbers-container");
 
-const btnRestartGame = document.querySelector(".btn-restart-game");
+const btnRestartGame = document.querySelectorAll(".btn-restart-game");
 const btnRestartLevel = document.querySelector(".btn-restart-level");
 
 difficultyOptionsEl.addEventListener("click", function (e) {
@@ -97,16 +100,20 @@ function populateNumCells() {
     el.dataset.num = playNumsArr[i];
   });
 
-  const firstEl = numsContainerEl.querySelector('[data-num="0"');
-  firstEl.addEventListener("click", function () {
+  const firstEl = numsContainerEl.querySelector('[data-num="0"]');
+
+  function skipTimer() {
     clearTimers();
-    timeEl.textContent = "0:00";
+    timeEl.textContent = "";
     numEl.forEach((el) => {
       el.classList.add("hide-el");
     });
-  });
+    firstEl.classList.add("no-before");
+    firstEl.removeEventListener("click", skipTimer);
+  }
+
+  firstEl.addEventListener("click", skipTimer);
 }
-////////////////////////////////////////////////
 //5
 
 // 6
@@ -117,7 +124,7 @@ function setStats() {
 
 function showLives(num) {
   let heartLives = "💗 ".repeat(num);
-  if (num > 5) heartLives = `${"💗 ".repeat(3)}+${num - 3}`;
+  if (num > 3) heartLives = `${"💗 ".repeat(3)}+${num - 3}`;
   return heartLives;
 }
 // 6
@@ -141,6 +148,7 @@ function stopCountdownTimer() {
     numEl.forEach((el) => {
       el.classList.add("hide-el");
       clearTimers();
+      timeEl.textContent = "";
     });
   }, 1000 * timeToLook);
 }
@@ -156,11 +164,14 @@ function makeMinSec(num) {
 // 1
 
 // 1
-btnRestartGame.addEventListener("click", function (e) {
-  gameWindow.classList.add("hide-el");
-  startWindowEl.classList.remove("hide-el");
-  clearTimers();
-  numsContainerEl.classList = "numbers-container";
+btnRestartGame.forEach((btn) => {
+  btn.addEventListener("click", function (e) {
+    gameWindow.classList.add("hide-el");
+    startWindowEl.classList.remove("hide-el");
+    clearTimers();
+    numsContainerEl.classList = "numbers-container";
+    endWindowEl.classList.add("hide-el");
+  });
 });
 
 function clearTimers() {
@@ -180,11 +191,46 @@ btnRestartLevel.addEventListener("click", function (e) {
 
 numsContainerEl.addEventListener("click", function (e) {
   const numElContainer = e.target.closest(".number-container");
-  const numEl = numElContainer.querySelector(".num");
-  if (!numEl?.classList.contains("hide-el")) return;
+  const numEl = numElContainer?.querySelector(".num");
+  if (!numEl?.classList.contains("hide-el") || e.target === this) return;
 
   if (clickCounter === +numEl.dataset.num) {
     clickCounter++;
     numEl.classList.remove("hide-el");
+  } else {
+    gaveWrongAns(numElContainer, numEl);
+  }
+
+  if (clickCounter === quantityPlayNums) {
+    levelUp();
   }
 });
+
+function gaveWrongAns(numElContainer, numEl) {
+  numElContainer.classList.add("wrong-ans");
+  numEl.classList.remove("hide-el");
+  setTimeout(() => {
+    numElContainer.classList.remove("wrong-ans");
+    numEl.classList.add("hide-el");
+  }, 500);
+  livesLeft--;
+  livesEl.textContent = showLives(livesLeft);
+  if (livesLeft < 1) {
+    endWindowEl.classList.remove("hide-el");
+    gameWindow.classList.add("hide-el");
+    createEndMsg();
+  }
+}
+
+function createEndMsg() {
+  endMsgEl.textContent = `Congratulations, this time you made it to level ${level}!`;
+}
+
+function levelUp() {
+  level++;
+  if (level === 10 || level === 20 || level === 30) timeToLook = 20;
+  else timeToLook--;
+  livesLeft++;
+
+  startLevel();
+}
